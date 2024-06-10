@@ -1,0 +1,221 @@
+In MicroServices, there are many no. of services that should be integrate on a whole to become a project.
+So, while developing it will become tough for us developers, to know the status,beans,health,etc... of each and every microservice.
+To assist us for the checking of well-being of an each microservice, an Actuator comes into picture.
+
+SpringBoot Actuator offers us a set of end points that will help us to monitor the application.
+
+Some of the end points are 
+	- /actuator/health
+	- /actuator/metrics
+	- /actuator/beans
+	- /actuator/env
+	- /actuator/thread
+
+
+To get started with Actuator, select SpringBoot Actuator starter while you are creating a project or you can add later.
+
+It can be viewed like this in pom.xml :
+
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+
+* Actuator displays the info in JSON format
+
+Example actuator info for the following endpoints(practical) : 
+
+
+http://localhost:1331/actuator
+-------------------------------
+{
+"_links": {
+"self": {
+"href": "http://localhost:1331/actuator",
+"templated": false
+},
+"health": {
+"href": "http://localhost:1331/actuator/health",
+"templated": false
+},
+"health-path": {
+"href": "http://localhost:1331/actuator/health/{*path}",
+"templated": true
+}
+}
+}
+
+
+http://localhost:1331/actuator/health
+--------------------------------------
+{
+"status": "UP"
+}
+
+
+In order to include all the endpoints with the /actuator, we need to specify one property in application.properties, i.e,
+
+management.endpoints.web.exposure.include = *
+
+This will include all the endpoints and displays all the endpoints info with this url : http://localhost:1331/actuator
+
+{
+"_links": {
+"self": {
+"href": "http://localhost:1331/actuator",
+"templated": false
+},
+"beans": {
+"href": "http://localhost:1331/actuator/beans",
+"templated": false
+},
+"caches-cache": {
+"href": "http://localhost:1331/actuator/caches/{cache}",
+"templated": true
+},
+"caches": {
+"href": "http://localhost:1331/actuator/caches",
+"templated": false
+},
+"health": {
+"href": "http://localhost:1331/actuator/health",
+"templated": false
+},
+"health-path": {
+"href": "http://localhost:1331/actuator/health/{*path}",
+"templated": true
+},
+"info": {
+"href": "http://localhost:1331/actuator/info",
+"templated": false
+},
+"conditions": {
+"href": "http://localhost:1331/actuator/conditions",
+"templated": false
+},
+"configprops": {
+"href": "http://localhost:1331/actuator/configprops",
+"templated": false
+},
+"configprops-prefix": {
+"href": "http://localhost:1331/actuator/configprops/{prefix}",
+"templated": true
+},
+"env": {
+"href": "http://localhost:1331/actuator/env",
+"templated": false
+},
+"env-toMatch": {
+"href": "http://localhost:1331/actuator/env/{toMatch}",
+"templated": true
+},
+"loggers": {
+"href": "http://localhost:1331/actuator/loggers",
+"templated": false
+},
+"loggers-name": {
+"href": "http://localhost:1331/actuator/loggers/{name}",
+"templated": true
+},
+"heapdump": {
+"href": "http://localhost:1331/actuator/heapdump",
+"templated": false
+},
+"threaddump": {
+"href": "http://localhost:1331/actuator/threaddump",
+"templated": false
+},
+"metrics-requiredMetricName": {
+"href": "http://localhost:1331/actuator/metrics/{requiredMetricName}",
+"templated": true
+},
+"metrics": {
+"href": "http://localhost:1331/actuator/metrics",
+"templated": false
+},
+"sbom": {
+"href": "http://localhost:1331/actuator/sbom",
+"templated": false
+},
+"sbom-id": {
+"href": "http://localhost:1331/actuator/sbom/{id}",
+"templated": true
+},
+"scheduledtasks": {
+"href": "http://localhost:1331/actuator/scheduledtasks",
+"templated": false
+},
+"mappings": {
+"href": "http://localhost:1331/actuator/mappings",
+"templated": false
+},
+"refresh": {
+"href": "http://localhost:1331/actuator/refresh",
+"templated": false
+},
+"features": {
+"href": "http://localhost:1331/actuator/features",
+"templated": false
+},
+"serviceregistry": {
+"href": "http://localhost:1331/actuator/serviceregistry",
+"templated": false
+}
+}
+}
+
+
+There is one endpoint named shutdown in which it is for gracefully terminating the running program.
+But keeping the security reasons in view we cant directly give url in the browser.
+Also shutdown is bind with the POST method of HTTP request, since the browser supports only GET requests, we can take the suppost of postman.
+
+In order to work with shutdown endpoint, we should also add one property in application.properties file
+
+management.endpoint.shutdown.enabled = true
+
+The URL will be : http://localhost:1331/actuator/shutdown
+
+After sending this URL in Postman with POST request, i got encountered with this error
+
+{
+    "timestamp": "2024-05-30T15:00:25.094+00:00",
+    "status": 415,
+    "error": "Unsupported Media Type",
+    "trace": "org.springframework.web.HttpMediaTypeNotSupportedException: Content-Type 'multipart/form-data;boundary=--------------------------596683612938329829146739;charset=UTF-8' is not supported\r\n\tat 
+
+
+After that, i checked through internet and removed the Content-Type in header of Postman.
+The Content-Type should be text/plain or should not be at all.
+Mine is Multipart file that time.
+
+After successfully executing the URL, the response is
+
+{
+    "message": "Shutting down, bye..."
+}
+
+
+Then I checked the application in Eclipse whether it is terminated or not,
+
+[2m2024-05-30T20:34:22.143+05:30[0;39m [32m INFO[0;39m [35m65384[0;39m [2m---[0;39m [2m[Client-2] [      Thread-19][0;39m [2m[0;39m[36mcom.netflix.discovery.DiscoveryClient   [0;39m [2m:[0;39m Completed shut down of DiscoveryClient
+
+
+
+Difference
+-----------
+
+Stopping in Eclipse:
+---------------------
+Method: Directly stopping the JVM process via the IDE.
+
+Scope: Abrupt termination, may not execute cleanup tasks.
+
+Use Case: Quick termination during development and debugging.
+
+Shutting Down with Actuator:
+-----------------------------
+Method: Sending a POST request to the /actuator/shutdown endpoint.
+
+Scope: Graceful shutdown, ensures proper resource release and cleanup.
+
+Use Case: Controlled termination, ideal for production environments.
