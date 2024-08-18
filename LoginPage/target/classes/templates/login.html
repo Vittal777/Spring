@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="flex-container">
+        <div class="box">
+            <h1>LOGIN</h1>
+            <div th:if="${error}" class="error-message">
+                <p th:text="${error}" style="color: red;"></p>
+            </div>           
+            <form id="form" th:action="@{/login}" method="post">
+                <label for="username" id="uname-label">
+                    <div class="input-container">
+                        <input type="text" id="uname" name="username" style="width: 300px; height: 50px" placeholder="Username" autocomplete="off" required>
+                        <div class="user-logo">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                </label>
+                <br>
+                <label for="password" id="pwd-label">
+                    <div class="pwd-container">
+                        <input type="password" id="pwd" name="password" style="width: 300px; height: 50px" placeholder="Password" required>
+                        <div class="pwd-logo">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                    </div>
+                </label>
+                <div class="signup-container">
+                <p>Don't have an account yet?<a th:href="@{/register}" target="_blank"><span style="color:red;"> Sign Up </span></a>here</p>
+                </div>
+                <p><a th:href="@{/reset}" target="_blank"><span style="color:red">Forgot Password?</span></a></p>
+                <label for="submit" id="sub">
+                    <div class="sub-container">
+                        <input type="submit" id="submit" style="width:200px;height:40px" value="Login">
+                    </div>
+                </label>
+                 <div id="logout-message" th:if="${param.logout}" style="color: green;">
+                <p id="logout-msg">You've been logged out successfully.</p>
+            </div>
+            </form>
+        </div>
+    </div>
+    <script src="login.js"></script>
+</body>
+</html>

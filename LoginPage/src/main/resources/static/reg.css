@@ -1,0 +1,113 @@
+.flex-container{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    height:100vh;
+    position: relative;
+    color:white;
+}
+.flex-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Adjust the alpha value for transparency */
+    z-index: -1; /* Place the overlay behind the content */
+}
+.box{
+    width:400px;
+    height:400px;
+    
+    border-radius:3%;
+}
+html,body{
+    margin:0;   /*Removes default margin*/
+    background-image: url("wp1964634.png");
+}
+h1{
+    color:maroon;
+    text-align: center;
+    padding-top:20px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+label{
+    color:gray;
+}
+input[type="text"],
+input[type="password"],
+input[type="submit"]{
+
+width: 100%; 
+font-size: medium;
+padding: 10px;
+margin: 0 auto; 
+display: block; 
+border: none; 
+border-radius: 5px;
+background-color: rgb(69, 68, 66);
+font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+font-style: italic;
+}
+p,#error{
+    color:rgb(128, 117, 114);
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+#uname,#pwd,#mail{
+    color:linen;
+}
+a{
+    text-decoration:none;
+}
+.pwd-logo,.cpwd-logo{
+    cursor: pointer;
+    transition:color 0.3s ease-in-out
+}
+.pwd-logo:hover,.cpwd-logo:hover{
+    color:gold;
+}
+#submit{
+    border: 2px solid aqua;
+    background: none;
+    color:gray;
+}
+#submit[type="submit"]:hover{
+    cursor:pointer;
+    color:linen;
+}
+.input-container{
+    position: relative;
+}
+.user-logo{
+position: absolute;
+top: 40%;  
+right: 18%; 
+}
+.uname-container,.mail-container{
+	position:relative;
+}
+    .pwd-container,.cpwd-container{
+        position: relative;
+    }
+    .pwd-logo,.cpwd-logo{
+        position: absolute;
+        right:17%;
+        top:39%;
+    }
+#uname input:focus{
+    border:2px solid red;
+}
+#uname,#pwd,#mail,#cpwd{
+    background: none;
+    border-bottom: 2px solid aqua ;
+    outline:none;
+}
+
+#regp{
+	color:green;
+}
+#regf{
+	color:red;
+}

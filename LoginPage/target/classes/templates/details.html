@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Details</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<form method="post" th:action="@{/displayusers}"></form>
+    <h2>Train Details</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Username</th>
+                <th>Password</th>
+                <!-- Add more headers as needed -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="display : ${user}">
+                <td th:text="${display.id}"></td>
+                <td th:text="${display.email}"></td>
+                <td th:text="${display.username}"></td>
+                <td th:text="${display.password}"></td>
+                <!-- Add more columns as needed -->
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

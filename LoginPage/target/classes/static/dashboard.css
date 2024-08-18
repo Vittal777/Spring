@@ -1,0 +1,108 @@
+.logout-btn {
+    --color: #00A97F;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    display: flex;
+    padding: 0.8em 1.7em;
+    background-color: transparent;
+    align-items: center;
+    justify-content: center;
+    border-radius: .3em;
+    position: absolute;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Center the button precisely */
+    overflow: hidden;
+    cursor: pointer;
+    transition: .5s;
+    font-weight: 400;
+    font-size: 17px;
+    border: 1px solid;
+    text-transform: uppercase;
+    color: var(--color);
+    z-index: 1;
+}
+
+.logout-btn::before,
+.logout-btn::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 50px;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    border-radius: 50%;
+    z-index: -1;
+    background-color: var(--color);
+    transition: 0.5s ease;
+}
+
+.logout-btn::before {
+    top: -1em;
+    left: -1em;
+}
+
+.logout-btn::after {
+    left: calc(100% + 1em);
+    top: calc(100% + 1em);
+}
+
+.logout-btn:hover::before,
+.logout-btn:hover::after {
+    height: 410px;
+    width: 410px;
+}
+
+.logout-btn:hover {
+    color: rgb(10, 25, 30);
+}
+
+.logout-btn:active {
+    filter: brightness(.8);
+}
+.welcome-heading{
+	display:flex;
+	position:absolute;
+	align-items:center;
+	justify-content:center;
+	top:30%;
+	left:44%;
+	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+	color:#333;
+	animation: slideIn 2s ease-in-out; /* Example animation */
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

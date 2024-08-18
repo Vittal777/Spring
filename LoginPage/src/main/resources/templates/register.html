@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="reg.css">
+</head>
+<body>
+    <div class="flex-container">
+        <div class="box">
+            <h1>CREATE ACCOUNT</h1>          
+            <form id="form" th:action="@{/register}" method="post">
+             <label for="mail" id="mail-label">
+                        <div class="mail-container">
+                            <input type="text" id="mail" name="email" style="width: 300px; height: 50px" placeholder="Email" autocomplete="off" required>
+                            <div class="user-logo">
+                                <i class="fa-solid fa-at"></i>
+                            </div>
+                        </div>
+                    </label>
+                <label for="username" id="uname-label">
+                    <div class="uname-container">
+                        <input type="text" id="uname" name="username" style="width: 300px; height: 50px" placeholder="Username" autocomplete="off" required>
+                        <div class="user-logo">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                </label>
+                <br>
+                <label for="password" id="pwd-label">
+                    <div class="pwd-container">
+                        <input type="password" id="pwd" name="password" style="width: 300px; height: 50px" placeholder="Password" required>
+                        <div class="pwd-logo">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                    </div>
+                </label>
+                <br>
+                <br>
+                <div th:if="${regmsg}" class="reg-message">
+                <p th:text="${regmsg}" id="regp"></p>
+            </div> 
+             <div th:if="${regfail}" class="regfail-msg">
+    			<p th:text="${regfail}" id="regf"></p>
+			</div>
+                <label for="submit" id="sub">
+                    <div class="sub-container">
+                        <input type="submit" id="submit" style="width:200px;height:40px" value="Register">
+                    </div>
+                </label>
+            </form>
+        </div>
+    </div>
+    <script src="reg.js"></script>
+</body>
+</html>
