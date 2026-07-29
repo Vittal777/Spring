@@ -10,13 +10,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(uniqueConstraints= {@UniqueConstraint(columnNames= {"email"}),
 							@UniqueConstraint(columnNames= {"username"}),
 							@UniqueConstraint(columnNames= {"password"})})
+@Data
 public class Users {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -24,4 +25,11 @@ public class Users {
 	String email;
 	String username;
 	String password;
+	/*public String getPassword() {
+	    return password;
+	}
+
+	public void setPassword(String password) {
+	    this.password = password;
+	}*/
 }

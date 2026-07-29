@@ -18,7 +18,7 @@ var regmessage = document.getElementById('regp');
         regmessage.style.display = 'block';
         setTimeout(function() {
             regmessage.style.display = 'none';
-            window.location.href = 'http://localhost:1725/login';
+            window.location.href = '/login';
         }, 1500); 
         
     }
