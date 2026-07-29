@@ -16,4 +16,9 @@ pipeline {
             }
         }
     }
+    post{
+		success{
+			archiveArtifacts artifacts: 'LoginPage/target/*.jar', fingerprint: true
+		}
+	}
 }
