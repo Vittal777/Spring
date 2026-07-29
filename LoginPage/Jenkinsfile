@@ -1,17 +1,18 @@
 pipeline {
-    agent any
+    agent {
+		docker{
+			image 'maven:3.9.11-eclipse-temurin-17'
+		}
+	}
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                echo 'Source code will be checked out by Jenkins'
-            }
-        }
-
         stage('Build') {
             steps {
-                echo 'Building application'
+				dir('LoginPage'){
+                sh 'mvn --version'
+                sh 'mvn clean package'
+                }
             }
         }
     }
