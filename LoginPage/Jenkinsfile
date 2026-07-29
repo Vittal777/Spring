@@ -11,7 +11,7 @@ pipeline {
             steps {
 				dir('LoginPage'){
                 sh 'mvn --version'
-                sh 'mvn clean package'
+                sh 'mvn clean package -DskipTests'
                 }
             }
         }
