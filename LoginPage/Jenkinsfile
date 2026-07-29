@@ -15,10 +15,15 @@ pipeline {
                 }
             }
         }
+        stage('Docker Image Build'){
+			steps{
+				sh 'docker build -t loginpage-springboot:${BUILD_NUMBER} LoginPage'
+			}
+		}
     }
     post{
 		success{
-			archiveArtifacts artifacts: 'LoginPage/target/*.jar', fingerprint: true
+			archiveArtifacts artifacts: 'LoginPage/target/*-SNAPSHOT.jar', fingerprint: true
 		}
 	}
 }
