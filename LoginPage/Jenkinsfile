@@ -57,7 +57,7 @@ pipeline {
 				ls -la /root/.kube
         		ls -la /root/.minikube
         		cat /root/.kube/config
-				kube config view
+				kubectl config view
 				kubectl config current-context
 				kubectl get nodes
 				helm version
