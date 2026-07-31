@@ -16,18 +16,13 @@ pipeline {
     stages {
 
         stage('Build') {
-    		steps {
-        		sh '''
-        			echo "===== DEBUG INFO ====="
-        			hostname
-        			id
-        			pwd
-
-        			echo "Sleeping for 300 seconds..."
-        			sleep 300
-        			'''
-   				 }
-			}
+            steps {
+				dir('LoginPage'){
+                sh 'mvn --version'
+                sh 'mvn clean package -DskipTests'
+                }
+            }
+        }
         stage('Docker Image Build'){
 			steps{
 				sh 'docker build -t loginpage-springboot:${BUILD_NUMBER} LoginPage'
