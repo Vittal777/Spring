@@ -5,8 +5,8 @@ pipeline {
 			args '''
 			-u root 
 			-v /var/run/docker.sock:/var/run/docker.sock
-			-v /var/jenkins_home/.kube:/root/.kube
-        	-v /var/jenkins_home/.minikube:/root/.minikube
+			-v /home/vittalc/.kube:/root/.kube
+        	-v /home/vittalc/.minikube:/root/.minikube
         	-e KUBECONFIG=/root/.kube/config
 			'''
 		}
@@ -52,7 +52,12 @@ pipeline {
 		stage('Check Kubernetes'){
 			steps{
 				sh '''
-				echo $KUBECONFIG
+				echo "KUBECONFIG=$KUBECONFIG"
+				
+				ls -la /root/.kube
+        		ls -la /root/.minikube
+        		cat /root/.kube/config
+				kube config view
 				kubectl config current-context
 				kubectl get nodes
 				helm version
