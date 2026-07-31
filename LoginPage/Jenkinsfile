@@ -3,6 +3,7 @@ pipeline {
 		docker{
 			image 'maven-docker-agent'
 			args '''
+			--network minikube
 			-u root 
 			-v /var/run/docker.sock:/var/run/docker.sock
 			-v /home/vittalc/.kube:/root/.kube
