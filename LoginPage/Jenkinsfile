@@ -67,9 +67,11 @@ pipeline {
 		}
 		stage('Deploy to Kubernetes'){
 			steps{
+				dir('LoginPage'){
 				sh '''
 				 helm upgrade --install login-app ./login-chart
 				 '''
+				 }
 			}
 		}
     }
