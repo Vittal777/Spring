@@ -2,7 +2,13 @@ pipeline {
     agent {
 		docker{
 			image 'maven-docker-agent'
-			args '-u root -v /var/run/docker.sock:/var/run/docker.sock'
+			args '''
+			-u root 
+			-v /var/run/docker.sock:/var/run/docker.sock
+			-v /var/jenkins_home/.kube:/root/.kube
+        	-v /var/jenkins_home/.minikube:/root/.minikube
+        	-e KUBECONFIG=/root/.kube/config
+			'''
 		}
 	}
 
@@ -43,9 +49,19 @@ pipeline {
 				}
 			}
 		}
+		stage('Check Kubernetes'){
+			steps{
+				sh '''
+				echo $KUBECONFIG
+				kubectl config current-context
+				kubectl get nodes
+				helm version
+				'''
+			}
+		}
 		stage('Deploy to Kubernetes'){
 			steps{
-				sh'''
+				sh '''
 				 helm upgrade --install login-app ./login-chart
 				 '''
 			}
