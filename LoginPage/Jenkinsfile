@@ -43,10 +43,21 @@ pipeline {
 				}
 			}
 		}
+		stage('Deploy to Kubernetes'){
+			steps{
+				sh'''
+				 helm upgrade --install login-app ./login-chart
+				 '''
+			}
+		}
     }
     post{
 		success{
 			archiveArtifacts artifacts: 'LoginPage/target/*-SNAPSHOT.jar', fingerprint: true
+			echo 'Application deployed successfully'
+		}
+		failure{
+			echo 'Pipeline failed.'
 		}
 	}
 }
