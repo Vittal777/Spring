@@ -28,7 +28,7 @@ pipeline {
 				sh 'docker build -t loginpage-springboot:${BUILD_NUMBER} LoginPage'
 			}
 		}
-		stage('Push Docker Image'){
+		stage('Pushing Docker Image'){
 			steps{
 				withCredentials([usernamePassword(
 					credentialsId: 'docker_hub-credentials',
