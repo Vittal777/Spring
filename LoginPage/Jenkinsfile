@@ -6,9 +6,6 @@ pipeline {
 			--network minikube
 			-u root 
 			-v /var/run/docker.sock:/var/run/docker.sock
-			-v /home/vittalc/.kube:/root/.kube
-        	-v /home/vittalc/.minikube:/root/.minikube
-        	-e KUBECONFIG=/root/.kube/config
 			'''
 		}
 	}
@@ -50,30 +47,27 @@ pipeline {
 				}
 			}
 		}
-		stage('Check Kubernetes'){
-			steps{
-				sh '''
-				echo "KUBECONFIG=$KUBECONFIG"
-				
-				ls -la /root/.kube
-        		ls -la /root/.minikube
-        		cat /root/.kube/config
-				kubectl config view
-				kubectl config current-context
-				kubectl get nodes
-				helm version
-				'''
-			}
-		}
-		stage('Deploy to Kubernetes'){
-			steps{
-				dir('LoginPage'){
-				sh '''
-				 helm upgrade --install login-app ./login-chart
-				 '''
-				 }
-			}
-		}
+		stage('Update GitOps Repo') {
+    steps {
+        dir('loginpage-gitops') {
+            git branch: 'main',
+                credentialsId: 'gitops-repo',
+                url: 'https://github.com/Vittal777/loginpage-gitpos.git'
+
+            sh '''
+                sed -i "s/tag: \".*\"/tag: \"${BUILD_NUMBER}\"/" login-chart/values.yaml
+
+                git config user.name "Jenkins"
+                git config user.email "jenkins@localhost"
+
+                git add login-chart/values.yaml
+                git commit -m "Update image tag to ${BUILD_NUMBER}" || true
+                git push origin main
+            '''
+        }
+    }
+}
+
     }
     post{
 		success{
