@@ -54,16 +54,23 @@ pipeline {
                 credentialsId: 'gitops-repo',
                 url: 'https://github.com/Vittal777/loginpage-gitpos.git'
 
-            sh '''
-                sed -i "s/tag: \".*\"/tag: \"${BUILD_NUMBER}\"/" login-chart/values.yaml
+            withCredentials([usernamePassword(
+                credentialsId: 'gitops-repo',
+                usernameVariable: 'GIT_USERNAME',
+                passwordVariable: 'GIT_PASSWORD'
+            )]) {
+                sh '''
+                    sed -i "s/tag: \".*\"/tag: \"${BUILD_NUMBER}\"/" login-chart/values.yaml
 
-                git config user.name "Jenkins"
-                git config user.email "jenkins@localhost"
+                    git config user.name "Jenkins"
+                    git config user.email "jenkins@localhost"
 
-                git add login-chart/values.yaml
-                git commit -m "Update image tag to ${BUILD_NUMBER}" || true
-                git push origin main
-            '''
+                    git add login-chart/values.yaml
+                    git commit -m "Update image tag to ${BUILD_NUMBER}" || true
+
+                    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Vittal777/loginpage-gitpos.git HEAD:main
+                '''
+            }
         }
     }
 }
