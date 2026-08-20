@@ -1,7 +1,6 @@
 package com.controller;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +13,8 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class HTMLController {
 	
+	private static final String LOGIN_URL = "login";
+	
 	private final ServiceClass service;
 	
 	HTMLController(ServiceClass service){
@@ -24,7 +25,7 @@ public class HTMLController {
 	public String form(Model model,HttpSession session) {
 		session.removeAttribute("username");
 		model.addAttribute("error","");
-		return "login";
+		return LOGIN_URL;
 	}
 	@PostMapping("/login")
 	public String validate(@RequestParam String username, @RequestParam String password, HttpSession session,Model model) {
@@ -34,7 +35,7 @@ public class HTMLController {
 	        return "redirect:/dashboard";
 	    } else {
 	    	model.addAttribute("error","Invalid Username or Password, Try again.");
-	        return "login";
+	        return LOGIN_URL;
 	    }
 	}
 
@@ -45,7 +46,7 @@ public class HTMLController {
 	        model.addAttribute("username", "WELCOME " + username);
 	        return "dashboard"; 
 	    } else {
-	        return "login";
+	        return LOGIN_URL;
 	    }
 	}
     @GetMapping("/logout")
