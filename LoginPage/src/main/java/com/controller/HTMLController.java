@@ -4,6 +4,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,18 +13,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.bo.Users;
 import com.service.ServiceClass;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 
 @Controller
 public class HTMLController {
 	
 	private static final String LOGIN_URL = "login";
+	private final SecurityContextRepository securityContextRepository;
 	
 	private final ServiceClass service;
 	private final AuthenticationManager authenticationManager;
 	
-	HTMLController(ServiceClass service,AuthenticationManager authenticationManager){
+	HTMLController(ServiceClass service,AuthenticationManager authenticationManager,SecurityContextRepository securityContextRepository){
 		this.service = service;
 		this.authenticationManager = authenticationManager;
+		this.securityContextRepository = securityContextRepository;
 	}
 
 	@GetMapping("/login")
@@ -33,11 +39,12 @@ public class HTMLController {
 	}
 	
 	@PostMapping("/login")
-	public String validate(@RequestParam String username, @RequestParam String password, Model model) {
+	public String validate(@RequestParam String username, @RequestParam String password, Model model,HttpServletRequest request,HttpServletResponse response) {
 	    try {
 	    	Authentication authentication = authenticationManager.authenticate(
 	    			new UsernamePasswordAuthenticationToken(username,password));
 	    	SecurityContextHolder.getContext().setAuthentication(authentication);
+	    	securityContextRepository.saveContext(SecurityContextHolder.getContext(),request,response);
 	    	return "redirect:/dashboard";
 	    }catch(Exception e) {
 	    	model.addAttribute("error", "Invalid Username or Password, Please try again.");
