@@ -14,9 +14,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(uniqueConstraints= {@UniqueConstraint(columnNames= {"email"}),
-							@UniqueConstraint(columnNames= {"username"}),
-							@UniqueConstraint(columnNames= {"password"})})
+@Table(uniqueConstraints= {@UniqueConstraint(columnNames= {"email"}),@UniqueConstraint(columnNames= {"username"})})
+
 @Data
 public class Users {
 	@Id
@@ -25,11 +24,4 @@ public class Users {
 	String email;
 	String username;
 	String password;
-	/*public String getPassword() {
-	    return password;
-	}
-
-	public void setPassword(String password) {
-	    this.password = password;
-	}*/
 }

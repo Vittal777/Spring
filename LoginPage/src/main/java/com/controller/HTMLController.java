@@ -1,6 +1,9 @@
 package com.controller;
-import java.util.List;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.bo.Users;
 import com.service.ServiceClass;
-import jakarta.servlet.http.HttpSession;
+
 
 @Controller
 public class HTMLController {
@@ -16,39 +19,39 @@ public class HTMLController {
 	private static final String LOGIN_URL = "login";
 	
 	private final ServiceClass service;
+	private final AuthenticationManager authenticationManager;
 	
-	HTMLController(ServiceClass service){
+	HTMLController(ServiceClass service,AuthenticationManager authenticationManager){
 		this.service = service;
+		this.authenticationManager = authenticationManager;
 	}
 
 	@GetMapping("/login")
-	public String form(Model model,HttpSession session) {
-		session.removeAttribute("username");
+	public String form(Model model) {
 		model.addAttribute("error","");
 		return LOGIN_URL;
 	}
+	
 	@PostMapping("/login")
-	public String validate(@RequestParam String username, @RequestParam String password, HttpSession session,Model model) {
-	    if (service.validate(username, password)) {
-	        session.setAttribute("username", username);
-	        
-	        return "redirect:/dashboard";
-	    } else {
-	    	model.addAttribute("error","Invalid Username or Password, Try again.");
-	        return LOGIN_URL;
-	    }
+	public String validate(@RequestParam String username, @RequestParam String password, Model model) {
+	    try {
+	    	Authentication authentication = authenticationManager.authenticate(
+	    			new UsernamePasswordAuthenticationToken(username,password));
+	    	SecurityContextHolder.getContext().setAuthentication(authentication);
+	    	return "redirect:/dashboard";
+	    }catch(Exception e) {
+	    	model.addAttribute("error", "Invalid Username or Password, Please try again.");
+	    return LOGIN_URL;
 	}
+}
 
 	@GetMapping("/dashboard")
-	public String dashboard(Model model, HttpSession session) {
-	    String username = (String) session.getAttribute("username");
-	    if (username != null) {
-	        model.addAttribute("username", "WELCOME " + username);
-	        return "dashboard"; 
-	    } else {
-	        return LOGIN_URL;
+	public String dashboard(Model model,Authentication authentication) {
+	    String username = authentication.getName();
+	    model.addAttribute("username", "WELCOME" + username);
+	        return "dashboard";
 	    }
-	}
+	
     @GetMapping("/logout")
     public String logout() {
         return "redirect:/login?logout=true";
@@ -85,11 +88,4 @@ public class HTMLController {
 	       }
 	       return "register";  
 	   }
-	   @GetMapping("/displayusers")
-	   public String display(Model model) {
-		   List<Users> l = service.fetchAll();
-		   model.addAttribute("user", l);
-		   return "details";
-	   }
-
 }

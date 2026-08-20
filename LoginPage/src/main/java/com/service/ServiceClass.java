@@ -1,8 +1,5 @@
 package com.service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +8,7 @@ import com.repo.LoginRepo;
 
 import jakarta.validation.ConstraintViolationException;
 
-@Service("service")
+@Service
 public class ServiceClass implements ServiceImpl {
 	
 	private final LoginRepo repo;
@@ -36,36 +33,6 @@ public class ServiceClass implements ServiceImpl {
 	}
 
 	@Override
-	public String regAll(Set<Users> u) {
-		repo.saveAll(u);
-		return null;
-	}
-
-	@Override
-	public String displayMessage() {
-		return "Invalid Credentials";
-	}
-
-	@Override
-	public String findByUsernameAndPassword(String uname, String pwd) {
-		Optional<Users> opt=repo.findByUsernameAndPassword(uname, pwd);
-		if(opt.isPresent()) {
-			System.out.print(opt.get());
-			return "User found with the given credentials";
-		}
-		return "User not found.";
-	}
-
-	@Override
-	public Optional<Users> findByUsername(String name) {
-		return repo.findByUsername(name);
-	}
-	public boolean validate(String uname,String pwd) {
-		Optional<Users> user = findByUsername(uname);
-		return user.isPresent()&&user.get().getPassword().equals(pwd);
-	}
-
-	@Override
 	public String findEmail(String mail) {
 		Users user = repo.findByEmail(mail);
 		if(user!=null) {
@@ -78,13 +45,10 @@ public class ServiceClass implements ServiceImpl {
 	public String modifypwd(String mail, String newpwd) {
 		Users user = repo.findByEmail(mail);
 		if(user!=null) {
-			user.setPassword(newpwd);
+			user.setPassword(passwordEncoder.encode(newpwd));
 			repo.save(user);
 			return "Password reset successfully";
 		}
 		return "An error occurred";
-	}
-	public List<Users> fetchAll(){
-		return repo.findAll();
 	}
 }
