@@ -14,8 +14,11 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class HTMLController {
 	
-	@Autowired
-	ServiceClass service;
+	private final ServiceClass service;
+	
+	HTMLController(ServiceClass service){
+		this.service = service;
+	}
 
 	@GetMapping("/login")
 	public String form(Model model,HttpSession session) {
