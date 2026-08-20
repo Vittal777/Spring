@@ -3,8 +3,7 @@ package com.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bo.Users;
@@ -15,17 +14,23 @@ import jakarta.validation.ConstraintViolationException;
 @Service("service")
 public class ServiceClass implements ServiceImpl {
 	
-	@Autowired
-	LoginRepo repo;
+	private final LoginRepo repo;
+	private final PasswordEncoder passwordEncoder;
+	
+	public ServiceClass(LoginRepo repo,PasswordEncoder passwordEncoder) {
+		this.repo=repo;
+		this.passwordEncoder=passwordEncoder;
+	}
+
 
 	@Override
 	public String regUsers(Users u) {
 		try {
-		repo.save(u);
+			u.setPassword(passwordEncoder.encode(u.getPassword()));
+			repo.save(u);
 		}
 		catch(ConstraintViolationException e) {
-			String msg = e.getMessage();
-			return msg;
+			return e.getMessage();
 		}
 		return "User registered successfully";
 	}
