@@ -38,7 +38,13 @@ public class SecurityConfig {
 	        		.requestMatchers("/login","/register","/actuator/health/**").permitAll()
 	            .anyRequest().authenticated())
 	        .formLogin(form -> form.disable())
-	        .httpBasic(httpBasic -> httpBasic.disable());
+	        .httpBasic(httpBasic -> httpBasic.disable())
+	        .logout(logout -> logout
+	        	            .logoutUrl("/logout")
+	        	            .logoutSuccessUrl("/login?logout=true")
+	        	            .invalidateHttpSession(true)
+	        	            .clearAuthentication(true)
+	        	            .deleteCookies("JSESSIONID"));
 
 	    return http.build();
 	}

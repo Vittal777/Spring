@@ -55,14 +55,9 @@ public class HTMLController {
 	@GetMapping("/dashboard")
 	public String dashboard(Model model,Authentication authentication) {
 	    String username = authentication.getName();
-	    model.addAttribute("username", "WELCOME" + username);
+	    model.addAttribute("username", "WELCOME " + username);
 	        return "dashboard";
 	    }
-	
-    @GetMapping("/logout")
-    public String logout() {
-        return "redirect:/login?logout=true";
-}
 
 	   @GetMapping("/reset-pwd")
 	   public String reset() {
